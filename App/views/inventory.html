@@ -1,0 +1,70 @@
+<!--INVENTARIO-->
+<div class="header_section">
+  <h1 class="tittle_section">INVENTARIO</h1>
+</div>
+<div class="container_section">
+  <div class="controls">
+    <div class="group_buttons">
+      <div class="radio">
+        <input type="radio" name="movimientoalmacen" id="I" value="I" />
+        <label for="I">INGRESO</label>
+        <input type="radio" name="movimientoalmacen" id="S" value="S" />
+        <label for="S">SALIDA</label>
+      </div>
+    </div>
+    <div class="group_controls cont_large">
+      <input
+        type="text"
+        name="motivo"
+        id="motivo"
+        placeholder="Concepto de movimiento"
+      />
+    </div>
+  </div>
+  <div class="controls">
+    <div class="group_controls cont_large">
+      <label for="producto">Producto</label>
+      <input type="text" name="producto" id="producto" />
+    </div>
+    <div class="group_controls cont_small">
+      <label for="cantidad">Cantidad</label>
+      <input type="text" name="cantidad" id="cantidad" />
+    </div>
+    <div class="group_controls">
+      <button type="button" class="button">Agregar</button>
+    </div>
+  </div>
+  <div class="cont_table">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#</td>
+          <td class="t_left">Producto</td>
+          <td>Precio</td>
+          <td>Cantidad</td>
+          <td>Total</td>
+        </tr>
+        <tr>
+          <td>#</td>
+          <td class="t_left">Producto</td>
+          <td>Precio</td>
+          <td>Cantidad</td>
+          <td>Total</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group_buttons">
+    <button type="button" class="button">Guardar</button>
+    <button type="button" class="button">Cancelar</button>
+  </div>
+</div>

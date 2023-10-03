@@ -1,0 +1,52 @@
+<!--PRODUCTOS-->
+<div class="header_section">
+  <h1 class="tittle_section">PRODUCTOS</h1>
+</div>
+<div class="container_section">
+  <div class="controls">
+    <div class="group_controls cont_large">
+      <input
+        type="text"
+        name="search_product"
+        id="search_product"
+        placeholder="Buscar producto"
+      />
+    </div>
+
+    <div class="group_controls">
+      <button type="button" class="button">Nuevo</button>
+    </div>
+  </div>
+  <div class="cont_table">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tb_products">
+        <tr>
+          <td>#</td>
+          <td class="t_left">Producto</td>
+          <td>Precio</td>
+          <td>Cantidad</td>
+          <td>Editar - Eliminar</td>
+        </tr>
+        <tr>
+          <td>#</td>
+          <td class="t_left">Producto</td>
+          <td>Precio</td>
+          <td>Cantidad</td>
+          <td>Editar - Eliminar</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  loadProducts();
+</script>

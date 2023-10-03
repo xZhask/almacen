@@ -1,0 +1,205 @@
+:root{
+    --red: #EA2027;
+    --red-light: #fc5c65;
+    --light: #f1f2f6;
+    --gray: #636e72;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+.wrapper{
+    height: 100vh;
+}
+.main_header{
+    height: 60px;
+    background-color: var(--red-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main_container{
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+}
+.aside{
+    width: 100%;
+    max-width: 110px;
+    background-color: black;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.cont_logo{
+    width: 100%;
+    max-width: 110px;
+    background-color: black;
+    height: 100%;
+}
+a{
+    text-decoration: none;
+}
+.nav{width: 100%;}
+.aside a{
+    padding: 15px 10px;
+    color: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    font-size: .9em;
+    transition: all ease .4s;
+    -webkit-transition: all ease .4s;
+    -moz-transition: all ease .4s;
+    -ms-transition: all ease .4s;
+    -o-transition: all ease .4s;
+}
+.aside a img{
+    max-height: 35px;
+}
+.nav a:hover{
+    background-color: var(--red-light);
+}
+.cont_info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 20px;
+}
+.avatar{
+    height: 45px;
+    width: 45px;
+    background-color: aquamarine;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+.btn-red{
+    position: absolute;
+    bottom: 20px;
+}
+.container{
+    padding: 20px 25px;
+    width: 100%;
+}
+.header_section{
+    padding: 20px 0;
+}
+.container_section{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.controls{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.group_controls{
+    display: flex;
+    flex-direction: column;
+}
+.group_controls label{
+    font-size: .9em;
+    color: var(--gray);
+}
+.group_controls input{
+    padding: 7px 10px;
+    border: 1px solid #b2bec3;
+    outline: none;
+}
+.cont_small{
+    max-width: 70px;
+}
+.cont_large{
+    width: 100%;
+    max-width: 550px;
+}
+.button{
+    padding: 10px 20px;
+    background-color: var(--light) ;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    transition: backgroud-color ease .4s ;
+    -webkit-transition: backgroud-color ease .4s ;
+    -moz-transition: backgroud-color ease .4s ;
+    -ms-transition: backgroud-color ease .4s ;
+    -o-transition: backgroud-color ease .4s ;
+}
+table{
+    background-color: var(--light);
+    width: 100%;
+    font-size: .9em;
+}
+table th{
+    background-color: var(--gray);
+    padding: 7px;
+    color: #f1f2f6;
+}
+table tbody tr:nth-child(even) {
+	background: #FFF;
+}
+table td{
+    padding: 5px 10px;
+    text-align: center;
+}
+.t_left{
+    text-align: left !important;
+}
+.group_buttons{
+    display: flex;
+}
+/* RADIO BUTTON */
+.radio label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: rgba(230, 100, 90, 1);
+    position: relative;
+    padding: 5px 15px 5px 51px;
+    font-size: 1em;
+    border-radius: 5px;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+  .radio label:hover {
+    background: rgba(230, 100, 90, 0.1);
+  }
+  .radio label:before {
+    content: '';
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    position: absolute;
+    left: 15px;
+    border-radius: 50%;
+    background: none;
+    border: 3px solid rgba(230, 100, 90, 1);
+  }
+  input[type='radio'] {
+    display: none;
+  }
+  input[type='radio']:checked + label:before {
+    display: none;
+  }
+  input[type='radio']:checked + label {
+    padding: 5px 15px;
+    background: rgba(230, 100, 90, 1);
+    border-radius: 2px;
+    color: #fff;
+  }
