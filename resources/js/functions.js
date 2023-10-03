@@ -53,23 +53,51 @@ $(document).on("keyup", "#search_product", () => {
 });
 
 /* VENTAS */
+let carritoVenta = [];
 function searchCompleteProductVenta() {
-  cargarAutoCompletado("#producto");
+  cargarAutoCompletado("#producto", 'v');
 }
-const cargarAutoCompletado = (input) => {
+const cargarAutoCompletado = (input, section) => {
   $(input).autocomplete({
     source: nombreProductos,
     select: (e, item) => {
       let producto = item.item.value;
       let position = nombreProductos.indexOf(producto);
-      let idProducto = listadoProductos[position].idproducto;
-      //console.log(idProducto);
-
-      /*cargarTarifario(nivelIpress);
-      localStorage.setItem("ipress", unidad); */
+      infoProductoSeleccionado(position, section)
     },
   });
 };
+
+$(document).on("click", "#add_car", () => {
+  let producto = $('#producto').val()
+  let precio = $('#precio').val()
+  let cantidad = $('#cantidad').val()
+  let subtotal = precio * cantidad;
+  let newProductCarrito = { nombre: producto, precio: precio, cantidad: cantidad, subtotal: subtotal };
+  carritoVenta.push(newProductCarrito);
+  renderCarrito()
+});
+
+
+const infoProductoSeleccionado = (position, section) => {
+  let stock = listadoProductos[position].stock;
+  let precio = listadoProductos[position].precio;
+  if (section === 'v') {
+    $('#stock').val(stock);
+    $('#precio').val(precio);
+  }
+}
+function renderCarrito() {
+  const filasCarrito = crearFilasCarrito();
+  $("#tb_venta").html(filasCarrito);
+}
+const crearFilasCarrito = () =>
+  carritoVenta
+    .map(
+      (product, indice) =>
+        `<tr><td>${indice + 1}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${product.cantidad}</td><td>S/ ${product.subtotal}</td>`
+    )
+    .join("")
 /*
 buttons2.forEach(button =>{
   button.addEventListener("click",_ =>{
