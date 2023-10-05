@@ -3,6 +3,8 @@
     --red-light: #fc5c65;
     --light: #f1f2f6;
     --gray: #636e72;
+    --blue:#2980b9;
+    --gray-light:#dfe4ea;
 }
 
 * {
@@ -100,11 +102,16 @@ a {
     -o-border-radius: 50%;
 }
 
-.btn-red {
+.btn_logout {
     position: absolute;
     bottom: 20px;
 }
-
+.btn_red{
+    color: var(--red);
+}
+.btn_blue{
+    color: var(--blue);
+}
 .container {
     padding: 20px 25px;
     width: 100%;
@@ -243,4 +250,156 @@ input[type='radio']:checked+label {
     background: rgba(230, 100, 90, 1);
     border-radius: 2px;
     color: #fff;
+}
+table i{
+    cursor: pointer;
+    font-size: 1.1em;
+}
+.t_bold{
+    font-weight: bold;
+}
+/* --- MODAL ---*/
+.bg-modal,
+.close-modal-area {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.bg-modal {
+    display: none;
+    overflow: auto;
+    background-color: rgba(30, 39, 46, .7);
+}
+
+/* The modal box */
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* The modal's content */
+.modal-dialog .modal-content {
+    margin: auto;
+    background-color: #fff;
+    position: relative;
+    padding: 15px 30px;
+    outline: 0;
+    border-radius: 10px;
+    text-align: justify;
+    width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animation-modal;
+    /* Add animation */
+    -webkit-animation-duration: 0.5s;
+    /* Chrome, Safari, Opera */
+    animation-name: animation-modal;
+    /* Chrome, Safari, Opera */
+    animation-duration: 0.5s;
+    max-width: 450px;
+}
+
+/* The button used to close the modal */
+.close_btn {
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    transition: all ease .5s;
+    width: 1em;
+    height: 1em;
+    padding: .7em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red-light);
+    position: absolute;
+    right: -15px;
+    top: -12px;
+}
+
+.close_btn:hover,
+.close_btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+}
+.tittle_form {
+    color: var(--red-light);
+    padding-bottom: 7px;
+}
+
+.modal_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal_form form {
+    flex-direction: column;
+    gap: 8px;
+    padding: 1em 0;
+    display: flex;
+}
+
+/* Add animation (Chrome, Safari, Opera) */
+@-webkit-keyframes animation-modal {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0px;
+        opacity: 1;
+    }
+}
+
+/* Add animation (Standard syntax) */
+@keyframes animation-modal {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0px;
+        opacity: 1;
+    }
+}
+.cont_inputs_form{
+    width: 100%;
+    display: flex;
+    gap: 7px;
+}
+.cont_inputs_form input{
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: 1px solid var(--gray);
+}
+.cont_inputs_form input::placeholder{
+    opacity: .6;
+}
+.btn_form{
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    background-color: var(--gray);
+    color: var(--light);
+    transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    font-size: 1em;
+}
+.btn_form:hover{
+    background-color: var(--red-light);
+    color: var(--light);
 }

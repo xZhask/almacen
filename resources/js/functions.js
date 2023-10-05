@@ -40,7 +40,7 @@ const crearFilasTablaProducts = (listProducts) =>
   listProducts
     .map(
       (product) =>
-        `<tr><td>${product.idproducto}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>S/.${product.stock}</td><td>Editar - Eliminar</td></tr>`
+        `<tr><td>${product.idproducto}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>S/ ${product.stock}</td><td><i class="fa-solid fa-square-pen btn_blue"></i>  <i class="fa-solid fa-square-minus btn_red"></i></td></tr>`
     )
     .join("");
 
@@ -55,7 +55,7 @@ $(document).on("keyup", "#search_product", () => {
 /* VENTAS */
 let carritoVenta = [];
 function searchCompleteProductVenta() {
-  cargarAutoCompletado("#producto", 'v');
+  cargarAutoCompletado("#producto", "v");
 }
 const cargarAutoCompletado = (input, section) => {
   $(input).autocomplete({
@@ -63,41 +63,121 @@ const cargarAutoCompletado = (input, section) => {
     select: (e, item) => {
       let producto = item.item.value;
       let position = nombreProductos.indexOf(producto);
-      infoProductoSeleccionado(position, section)
+      infoProductoSeleccionado(position, section);
     },
   });
 };
 
 $(document).on("click", "#add_car", () => {
-  let producto = $('#producto').val()
-  let precio = $('#precio').val()
-  let cantidad = $('#cantidad').val()
+  let producto = $("#producto").val();
+  let precio = $("#precio").val();
+  let cantidad = $("#cantidad").val();
   let subtotal = precio * cantidad;
-  let newProductCarrito = { nombre: producto, precio: precio, cantidad: cantidad, subtotal: subtotal };
+  let newProductCarrito = {
+    nombre: producto,
+    precio: precio,
+    cantidad: cantidad,
+    subtotal: subtotal,
+  };
   carritoVenta.push(newProductCarrito);
-  renderCarrito()
+  renderCarrito();
 });
-
 
 const infoProductoSeleccionado = (position, section) => {
   let stock = listadoProductos[position].stock;
   let precio = listadoProductos[position].precio;
-  if (section === 'v') {
-    $('#stock').val(stock);
-    $('#precio').val(precio);
+  if (section === "v") {
+    $("#stock").val(stock);
+    $("#precio").val(precio);
   }
-}
+};
 function renderCarrito() {
   const filasCarrito = crearFilasCarrito();
-  $("#tb_venta").html(filasCarrito);
+  const totalCarrito = calcularTotales();
+  $("#tb_venta").html(`${filasCarrito}${totalCarrito}`);
 }
 const crearFilasCarrito = () =>
   carritoVenta
     .map(
       (product, indice) =>
-        `<tr><td>${indice + 1}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${product.cantidad}</td><td>S/ ${product.subtotal}</td>`
+        `<tr><td><i class="fa-solid fa-circle-xmark btn_delete btn_red"></i></td><td>${
+          indice + 1
+        }</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${
+          product.cantidad
+        }</td><td>S/ ${product.subtotal}</td>`
     )
-    .join("")
+    .join("");
+const calcularTotales = () => {
+  let total = carritoVenta.reduce(
+    (acumulador, product) => acumulador + product.subtotal,
+    0
+  );
+  return `<tr><td colspan="5" class="t_bold">Total</td><td class="t_bold">S/ ${total}</td></tr>`;
+};
+
+$(document).on("click", "#tb_venta .btn_delete", function () {
+  let parent = $(this).closest("table");
+  let tr = $(this).closest("tr");
+  let position = $(tr).find("td").eq(1).html();
+  position = position - 1;
+  carritoVenta.splice(position, 1);
+  renderCarrito();
+});
+/* MODAL */
+const modal = document.querySelector("#bg-modal");
+const modalContent = document.querySelector("#modal-content");
+const modalForm = document.querySelector("#modal_form");
+/* NUEVO PRODUCTO */
+//Cerrar Modal
+const abrirModal = () => {
+  modal.style.display = "table";
+};
+const cerrarModal = () => {
+  modal.style.display = "none";
+  //modalContent.classList.remove("frm-lg");
+  actionForm = "";
+  CodigoSearch = "";
+};
+$("a.closeModal").on("click", (e) => {
+  e.preventDefault();
+  cerrarModal();
+});
+$(document).on("click", "#btn_newProduct", () => {
+  abrirModal();
+});
+
+/* const abrirModal = (form) => {
+  modal.style.display = "table";
+  $.ajax({
+    url: `App/views/modals/${form}`,
+    cache: false,
+    dataType: "html",
+    success: function (data) {
+      $("#modal_form").html(data);
+      if (form === "frmPersonal.html") {
+        if (actionForm == "U") llenarDatosPersonal();
+        else $("#btn_search_personal").css("display", "block");
+      }
+      if (form === "frmNuevoRegistro.html") {
+        if (actionForm == "U") {
+          llenarTipoDoc();
+          llenarDatosIncidencia();
+          llenarListadoPeritos();
+        } else {
+          $("#btn_search_user").css("display", "block");
+          $("#btn_search_conductor").css("display", "block");
+          let fechaActual = cargarFechaActual();
+          console.log(fechaActual);
+          $("#fechaRecepcion").val(fechaActual["fecha"]);
+          $("#horaRecepcion").val(fechaActual["hora"]);
+          fechaRecepcion.max = fechaActual["fecha"];
+          fechaInfraccion.max = fechaActual["fecha"];
+          fechaExtraccion.max = fechaActual["fecha"];
+        }
+      }
+    },
+  });
+}; */
 /*
 buttons2.forEach(button =>{
   button.addEventListener("click",_ =>{

@@ -1,63 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="resources/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="resources/js/jquery-ui-1.13.1/jquery-ui.min.css"
+    />
+    <link rel="icon" type="image/png" href="resources/img/favicon.png" />
+    <script
+      src="https://kit.fontawesome.com/47b4aaa3bf.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Almacén</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="resources/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="resources/js/jquery-ui-1.13.1/jquery-ui.min.css" />
-  <link rel="icon" type="image/png" href="resources/img/favicon.png" />
-  <title>Almacén</title>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main_header">
-      <div class="cont_logo"></div>
-      <div class="cont_info">
-        <div class="info">
-          <p>APELLIDOS USUARIO</p>
-          <span>CARGO</span>
+  <body>
+    <div class="wrapper">
+      <div class="main_header">
+        <div class="cont_logo"></div>
+        <div class="cont_info">
+          <div class="info">
+            <p>APELLIDOS USUARIO</p>
+            <span>CARGO</span>
+          </div>
+          <div class="avatar"></div>
         </div>
-        <div class="avatar"></div>
+      </div>
+      <div class="main_container">
+        <div class="aside">
+          <div class="nav">
+            <ul>
+              <li>
+                <a class="link" id="venta"
+                  ><img src="resources/img/sell.svg" alt="" />
+                  <p>Venta</p>
+                </a>
+              </li>
+              <li>
+                <a class="link" id="products"
+                  ><img src="resources/img/products.svg" alt="" />
+                  <p>Productos</p>
+                </a>
+              </li>
+              <li>
+                <a class="link" id="inventory"
+                  ><img src="resources/img/inventory.svg" alt="" />
+                  <p>Inventario</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <a href="#" class="btn_logout">
+            <img src="resources/img/off.svg" alt="" />
+          </a>
+        </div>
+        <div class="container" id="container"></div>
       </div>
     </div>
-    <div class="main_container">
-      <div class="aside">
-        <div class="nav">
-          <ul>
-            <li>
-              <a class="link" id="venta"><img src="resources/img/sell.svg" alt="" />
-                <p>Venta</p>
-              </a>
-            </li>
-            <li>
-              <a class="link" id="products"><img src="resources/img/products.svg" alt="" />
-                <p>Productos</p>
-              </a>
-            </li>
-            <li>
-              <a class="link" id="inventory"><img src="resources/img/inventory.svg" alt="" />
-                <p>Inventario</p>
-              </a>
-            </li>
-          </ul>
+    <div id="bg-modal" class="bg-modal">
+      <div class="modal-dialog">
+        <a class="closeModal close-modal-area"></a>
+        <div id="modal-content" class="modal-content">
+          <div class="modal_head">
+            <a class="close_btn closeModal">x</a>
+          </div>
+          <div class="modal_form" id="modal_form">
+            <form id="frmPersonal" autocomplete="off">
+              <h2 class="tittle_form">Producto</h2>
+              <div class="cont_inputs_form">
+                <input
+                  type="text"
+                  name="name_product"
+                  id="name_product"
+                  placeholder="Nombre de Producto"
+                />
+              </div>
+              <div class="cont_inputs_form">
+                <input
+                  type="text"
+                  name="priceProduct"
+                  id="priceProduct"
+                  placeholder="Precio"
+                />
+                <input
+                  type="text"
+                  name="sctockProduct"
+                  id="sctockProduct"
+                  placeholder="Stock"
+                />
+              </div>
+              <button class="btn_form" type="submit">Registrar</button>
+            </form>
+          </div>
         </div>
-        <a href="#" class="btn-red">
-          <img src="resources/img/off.svg" alt="" />
-        </a>
       </div>
-      <div class="container" id="container"></div>
     </div>
-  </div>
-</body>
+  </body>
 
-<script language="javascript" src="resources/js/jquery-3.6.0.min.js"></script>
-<script language="javascript" src="resources/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
-<script language="javascript" src="resources/js/functions.js"></script>
-
+  <script language="javascript" src="resources/js/jquery-3.6.0.min.js"></script>
+  <script
+    language="javascript"
+    src="resources/js/jquery-ui-1.13.1/jquery-ui.min.js"
+  ></script>
+  <script language="javascript" src="resources/js/functions.js"></script>
 </html>
