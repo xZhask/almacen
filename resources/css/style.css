@@ -136,11 +136,17 @@ a {
 .group_controls {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .group_controls label {
-    font-size: .9em;
+    position: absolute;
+    font-size: .8em;
     color: var(--gray);
+    top: -9px;
+    left: 2px;
+    background-color: white;
+    padding: 0 3px;
 }
 
 .group_controls input {

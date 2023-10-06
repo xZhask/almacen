@@ -27,8 +27,8 @@ async function postData(data) {
   }).then((res) => res.json());
   return await response;
 }
-/* PRODUCTS */
 
+/* PRODUCTS */
 async function loadProducts() {
   renderTablaProducts(listadoProductos);
 }
@@ -40,7 +40,7 @@ const crearFilasTablaProducts = (listProducts) =>
   listProducts
     .map(
       (product) =>
-        `<tr><td>${product.idproducto}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>S/ ${product.stock}</td><td><i class="fa-solid fa-square-pen btn_blue"></i>  <i class="fa-solid fa-square-minus btn_red"></i></td></tr>`
+        `<tr><td>${product.idproducto}</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td> ${product.stock}</td><td><i class="fa-solid fa-square-pen btn_blue btnEditProduct"></i>  <i class="fa-solid fa-square-minus btn_red"></i></td></tr>`
     )
     .join("");
 
@@ -129,23 +129,49 @@ const modalContent = document.querySelector("#modal-content");
 const modalForm = document.querySelector("#modal_form");
 /* NUEVO PRODUCTO */
 //Cerrar Modal
-const abrirModal = () => {
+const abrirModal = (data) => {
   modal.style.display = "table";
+  $.ajax({
+    data: data,
+    url: `App/views/modals.php`,
+    type: "POST",
+    cache: false,
+    dataType: "html",
+    beforeSend: function () {
+      $("#modal_form").html("Procesando, espere por favor...");
+    },
+    success: function (response) {
+      $("#modal_form").html(response);
+    },
+  });
 };
 const cerrarModal = () => {
   modal.style.display = "none";
-  //modalContent.classList.remove("frm-lg");
-  actionForm = "";
-  CodigoSearch = "";
 };
 $("a.closeModal").on("click", (e) => {
   e.preventDefault();
   cerrarModal();
 });
 $(document).on("click", "#btn_newProduct", () => {
-  abrirModal();
+  let parametros = { form: "PRODUCTO", accion: "_CREATE" };
+  abrirModal(parametros);
 });
-
+$(document).on("click", "#tb_products .btnEditProduct", function () {
+  let parent = $(this).closest("table");
+  let tr = $(this).closest("tr");
+  let id = $(tr).find("td").eq(1).html();
+  let position = nombreProductos.indexOf(id);
+  let nombre = listadoProductos[position].nombre;
+  let precio = listadoProductos[position].precio;
+  let parametros = {
+    form: "PRODUCTO",
+    accion: "_UPDATE",
+    precioProduct: precio,
+    nombreProduct: nombre,
+  };
+  abrirModal(parametros);
+  //position = position - 1;
+});
 /* const abrirModal = (form) => {
   modal.style.display = "table";
   $.ajax({
