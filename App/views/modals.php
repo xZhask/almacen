@@ -4,12 +4,12 @@ mostrarModal($form);
 
 function mostrarModal($form)
 {
-    switch ($form) {
-        case 'PRODUCTO':
-            $nombreProduct = isset($_POST['nombreProduct']) ? $_POST['nombreProduct'] : '';
-            $precioProduct = isset($_POST['precioProduct']) ? $_POST['precioProduct'] : '';
+  switch ($form) {
+    case 'PRODUCTO':
+      $nombreProduct = isset($_POST['nombreProduct']) ? $_POST['nombreProduct'] : '';
+      $precioProduct = isset($_POST['precioProduct']) ? $_POST['precioProduct'] : '';
 
-            $formluario = '<form id="frmProduct" autocomplete="off">
+      $formluario = '<form id="frmProduct" autocomplete="off">
             <h2 class="tittle_form">Producto</h2>
             <div class="cont_inputs_form">
               <input
@@ -24,22 +24,23 @@ function mostrarModal($form)
             <div class="cont_inputs_form">
               <input
                 type="text"
-                name="priceProduct"
-                id="priceProduct"
+                name="price_product"
+                id="price_product"
                 placeholder="Precio"
                 value="' . $precioProduct . '"
               />';
-            if ($_POST['accion'] === '_CREATE')
-                $formluario .= '<input
+      if ($_POST['accion'] === 'CREATE_PRODUCT')
+        $formluario .= '<input
                 type="text"
-                name="sctockProduct"
-                id="sctockProduct"
+                name="stock_product"
+                id="stock_product"
                 placeholder="Stock"
               />';
-            $formluario .= '</div>
+
+      $formluario .= '</div>
             <button class="btn_form" type="submit">Registrar</button>
           </form>';
-            echo $formluario;
-            break;
-    }
+      echo $formluario;
+      break;
+  }
 }

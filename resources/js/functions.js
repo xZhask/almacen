@@ -1,6 +1,11 @@
 const _links = document.querySelectorAll(".link");
 const container = document.querySelector("#container");
 
+let listadoProductos = []; //Listado general de productos, todos los campos
+let nombreProductos = []; //Solo nombres de productos
+let productSelect = ""; //Producto seleccionado
+let actionForm; //Acción de formulario
+
 _links.forEach((link) => {
   link.addEventListener("click", (_) => {
     $.ajax({
@@ -11,14 +16,54 @@ _links.forEach((link) => {
     });
   });
 });
-let listadoProductos = [];
-let nombreProductos = [];
+/* MODAL Y MENSAJES */
+const abrirModal = (data) => {
+  modal.style.display = "table";
+  $.ajax({
+    data: data,
+    url: `App/views/modals.php`,
+    type: "POST",
+    cache: false,
+    dataType: "html",
+    beforeSend: function () {
+      $("#modal_form").html("Procesando, espere por favor...");
+    },
+    success: function (response) {
+      $("#modal_form").html(response);
+    },
+  });
+};
+const cerrarModal = () => {
+  $("#modal_form").html("");
+  modal.style.display = "none";
+  productSelect = "";
+  actionForm = "";
+};
+$("a.closeModal").on("click", (e) => {
+  e.preventDefault();
+  cerrarModal();
+});
+function showMsg(status, message) {
+  let icon = (status = 0 ? "error" : "success");
+  Swal.fire({
+    position: "top-end",
+    icon: icon,
+    title: message,
+    showConfirmButton: false,
+    timer: 1700,
+  });
+}
 window.addEventListener("load", async () => {
+  listadoProductos = await loadProducts();
+});
+
+async function loadProducts() {
   const datos = new FormData();
   datos.append("accion", "LISTAR_PRODUCTOS");
   listadoProductos = await postData(datos);
   nombreProductos = listadoProductos.map((producto) => producto.nombre);
-});
+  return listadoProductos;
+}
 
 async function postData(data) {
   const response = await fetch(`App/controllers/controller.php`, {
@@ -29,7 +74,8 @@ async function postData(data) {
 }
 
 /* PRODUCTS */
-async function loadProducts() {
+async function mostrarProducts() {
+  let listadoProductos = await loadProducts();
   renderTablaProducts(listadoProductos);
 }
 function renderTablaProducts(listProducts) {
@@ -69,11 +115,13 @@ const cargarAutoCompletado = (input, section) => {
 };
 
 $(document).on("click", "#add_car", () => {
+  let idproducto = $("#idproducto").val();
   let producto = $("#producto").val();
   let precio = $("#precio").val();
   let cantidad = $("#cantidad").val();
   let subtotal = precio * cantidad;
   let newProductCarrito = {
+    idproducto: idproducto,
     nombre: producto,
     precio: precio,
     cantidad: cantidad,
@@ -81,20 +129,26 @@ $(document).on("click", "#add_car", () => {
   };
   carritoVenta.push(newProductCarrito);
   renderCarrito();
+  let inputs = document.querySelectorAll(".controls input");
+  // Recorrer para poner valor
+  inputs.forEach((input) => (input.value = ""));
 });
 
 const infoProductoSeleccionado = (position, section) => {
   let stock = listadoProductos[position].stock;
   let precio = listadoProductos[position].precio;
+  let id = listadoProductos[position].idproducto;
   if (section === "v") {
     $("#stock").val(stock);
     $("#precio").val(precio);
+    $("#idproducto").val(id);
   }
 };
 function renderCarrito() {
   const filasCarrito = crearFilasCarrito();
   const totalCarrito = calcularTotales();
   $("#tb_venta").html(`${filasCarrito}${totalCarrito}`);
+  console.log(carritoVenta);
 }
 const crearFilasCarrito = () =>
   carritoVenta
@@ -123,55 +177,50 @@ $(document).on("click", "#tb_venta .btn_delete", function () {
   carritoVenta.splice(position, 1);
   renderCarrito();
 });
+function limpiarCarrito() {}
 /* MODAL */
 const modal = document.querySelector("#bg-modal");
 const modalContent = document.querySelector("#modal-content");
 const modalForm = document.querySelector("#modal_form");
 /* NUEVO PRODUCTO */
 //Cerrar Modal
-const abrirModal = (data) => {
-  modal.style.display = "table";
-  $.ajax({
-    data: data,
-    url: `App/views/modals.php`,
-    type: "POST",
-    cache: false,
-    dataType: "html",
-    beforeSend: function () {
-      $("#modal_form").html("Procesando, espere por favor...");
-    },
-    success: function (response) {
-      $("#modal_form").html(response);
-    },
-  });
-};
-const cerrarModal = () => {
-  modal.style.display = "none";
-};
-$("a.closeModal").on("click", (e) => {
-  e.preventDefault();
-  cerrarModal();
-});
+
 $(document).on("click", "#btn_newProduct", () => {
-  let parametros = { form: "PRODUCTO", accion: "_CREATE" };
+  actionForm = "CREATE_PRODUCT";
+  let parametros = { form: "PRODUCTO", accion: actionForm };
   abrirModal(parametros);
 });
 $(document).on("click", "#tb_products .btnEditProduct", function () {
+  actionForm = "UPDATE_PRODUCT";
   let parent = $(this).closest("table");
   let tr = $(this).closest("tr");
-  let id = $(tr).find("td").eq(1).html();
-  let position = nombreProductos.indexOf(id);
-  let nombre = listadoProductos[position].nombre;
+  let nombre = $(tr).find("td").eq(1).html();
+  let position = nombreProductos.indexOf(nombre);
+  nombre = listadoProductos[position].nombre;
   let precio = listadoProductos[position].precio;
+  productSelect = listadoProductos[position].idproducto;
   let parametros = {
     form: "PRODUCTO",
-    accion: "_UPDATE",
+    accion: actionForm,
     precioProduct: precio,
     nombreProduct: nombre,
   };
   abrirModal(parametros);
-  //position = position - 1;
 });
+
+/* REGISTRAR PRODUCTO */
+$(document).on("submit", "#frmProduct", async (e) => {
+  e.preventDefault();
+  let form = document.querySelector("#frmProduct");
+  let datos = new FormData(form);
+  datos.append("accion", "CREATE_UPDATE_PRODUCT");
+  datos.append("idProduct", productSelect);
+  let respuesta = await postData(datos);
+  showMsg(respuesta.status, respuesta.msg);
+  mostrarProducts();
+  cerrarModal();
+});
+
 /* const abrirModal = (form) => {
   modal.style.display = "table";
   $.ajax({
