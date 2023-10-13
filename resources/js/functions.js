@@ -116,22 +116,26 @@ const cargarAutoCompletado = (input, section) => {
 
 $(document).on("click", "#add_car", () => {
   let idproducto = $("#idproducto").val();
-  let producto = $("#producto").val();
-  let precio = $("#precio").val();
   let cantidad = $("#cantidad").val();
-  let subtotal = precio * cantidad;
-  let newProductCarrito = {
-    idproducto: idproducto,
-    nombre: producto,
-    precio: precio,
-    cantidad: cantidad,
-    subtotal: subtotal,
-  };
-  carritoVenta.push(newProductCarrito);
-  renderCarrito();
-  let inputs = document.querySelectorAll(".controls input");
-  // Recorrer para poner valor
-  inputs.forEach((input) => (input.value = ""));
+  if (idproducto === "") alert("Seleccionar Producto");
+  else if (cantidad === "") alert("Ingresar cantidad");
+  else {
+    let producto = $("#producto").val();
+    let precio = $("#precio").val();
+    let subtotal = precio * cantidad;
+    let newProductCarrito = {
+      idproducto: idproducto,
+      nombre: producto,
+      precio: precio,
+      cantidad: cantidad,
+      subtotal: subtotal,
+    };
+    carritoVenta.push(newProductCarrito);
+    renderCarrito();
+    let inputs = document.querySelectorAll(".controls input");
+    // Recorrer para poner valor
+    inputs.forEach((input) => (input.value = ""));
+  }
 });
 
 const infoProductoSeleccionado = (position, section) => {
