@@ -120,21 +120,40 @@ $(document).on("click", "#add_car", () => {
   if (idproducto === "") alert("Seleccionar Producto");
   else if (cantidad === "") alert("Ingresar cantidad");
   else {
+    let idProductsCar = carritoVenta.map((producto) => producto.idproducto);
+    let positionCarProduct = idProductsCar.indexOf(idproducto);
     let producto = $("#producto").val();
-    let precio = $("#precio").val();
-    let subtotal = precio * cantidad;
-    let newProductCarrito = {
-      idproducto: idproducto,
-      nombre: producto,
-      precio: precio,
-      cantidad: cantidad,
-      subtotal: subtotal,
-    };
-    carritoVenta.push(newProductCarrito);
-    renderCarrito();
-    let inputs = document.querySelectorAll(".controls input");
-    // Recorrer para poner valor
-    inputs.forEach((input) => (input.value = ""));
+    let positionListProduct = nombreProductos.indexOf(producto);
+    let stock = +listadoProductos[positionListProduct].stock;
+    if (cantidad > stock) alert("Stock insuficiente");
+    else {
+      let precio = listadoProductos[positionListProduct].precio;
+
+      if (positionCarProduct < 0) {
+        let subtotal = (precio * cantidad).toFixed(2);
+        let newProductCarrito = {
+          idproducto: idproducto,
+          nombre: producto,
+          precio: precio,
+          cantidad: cantidad,
+          subtotal: subtotal,
+        };
+        carritoVenta.push(newProductCarrito);
+      } else {
+        //carritoVenta[positionCarProduct]
+        let cantCarrito = +carritoVenta[positionCarProduct].cantidad;
+        let newCantidad = +cantidad + cantCarrito;
+        if (newCantidad > stock) alert("Stock insuficiente");
+        else {
+          carritoVenta[positionCarProduct].cantidad = newCantidad;
+          carritoVenta[positionCarProduct].subtotal = newCantidad * precio;
+        }
+      }
+      renderCarrito();
+      let inputs = document.querySelectorAll(".controls input");
+      // Recorrer para poner valor
+      inputs.forEach((input) => (input.value = ""));
+    }
   }
 });
 
@@ -167,10 +186,12 @@ const crearFilasCarrito = () =>
     .join("");
 const calcularTotales = () => {
   let total = carritoVenta.reduce(
-    (acumulador, product) => acumulador + product.subtotal,
+    (acumulador, product) => +product.subtotal + acumulador,
     0
   );
-  return `<tr><td colspan="5" class="t_bold">Total</td><td class="t_bold">S/ ${total}</td></tr>`;
+  return `<tr><td colspan="5" class="t_bold">Total</td><td class="t_bold">S/ ${total.toFixed(
+    2
+  )}</td></tr>`;
 };
 
 $(document).on("click", "#tb_venta .btn_delete", function () {
@@ -211,7 +232,10 @@ $(document).on("click", "#tb_products .btnEditProduct", function () {
   };
   abrirModal(parametros);
 });
-
+$(document).on("click", "#btnCleanCart", () => {
+  carritoVenta.length = 0;
+  $("#tb_venta").html(``);
+});
 /* REGISTRAR PRODUCTO */
 $(document).on("submit", "#frmProduct", async (e) => {
   e.preventDefault();
