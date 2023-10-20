@@ -5,17 +5,37 @@ let listadoProductos = []; //Listado general de productos, todos los campos
 let nombreProductos = []; //Solo nombres de productos
 let productSelect = ""; //Producto seleccionado
 let actionForm; //Acción de formulario
-
+let carritoVenta = []; //Carrito de venta
 _links.forEach((link) => {
   link.addEventListener("click", (_) => {
+    /* if (link.id != "venta" && carritoVenta.length>0) {
+      alert('desea limpiar el listado del carrito de venta?')
+    } */
+
     $.ajax({
       method: "POST",
       url: `App/views/${link.id}.html`,
     }).done(function (html) {
       $("#container").html(html);
+      _links.forEach((link) => {
+        link.classList.remove("active");
+      });
+      link.classList.toggle("active");
+      console.log(link);
     });
   });
 });
+
+/*
+buttons2.forEach(button =>{
+  button.addEventListener("click",_ =>{
+    buttons2.forEach(button =>{
+      button.classList.remove("edit");
+    })
+    button.classList.toggle("edit");
+  })
+})
+*/
 /* MODAL Y MENSAJES */
 const abrirModal = (data) => {
   modal.style.display = "table";
@@ -99,7 +119,7 @@ $(document).on("keyup", "#search_product", () => {
 });
 
 /* VENTAS */
-let carritoVenta = [];
+
 function searchCompleteProductVenta() {
   cargarAutoCompletado("#producto", "v");
 }

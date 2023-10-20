@@ -1,0 +1,23 @@
+create table movimiento
+(
+    id_movimiento int AUTO_INCREMENT,
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo CHAR(1) NOT NULL,
+    concepto VARCHAR(50) NOT NULL,
+    total DECIMAL(6,2) NOT NULL,
+    estado CHAR(1) NOT NULL,
+    PRIMARY KEY(id_movimiento)
+)ENGINE=INNODB;
+
+create table detalle_movimiento
+(
+    item int NOT NULL,
+    id_movimiento int NOT NULL,
+    idproducto int NOT NULL,
+    cantidad INT NOT NULL,
+    precio DECIMAL(6,2) NOT NULL,
+    subtotal DECIMAL(6,2) NOT NULL,
+    FOREIGN KEY(id_movimiento) REFERENCES movimiento(id_movimiento),
+    FOREIGN KEY(idproducto) REFERENCES producto(idproducto)
+)ENGINE=INNODB;

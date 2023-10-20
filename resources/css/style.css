@@ -75,11 +75,19 @@ a {
     -o-transition: all ease .4s;
     cursor: pointer;
 }
-
-.aside a img {
-    max-height: 35px;
+.aside a.active{
+    background-color: var(--light);
 }
 
+.aside a.active svg g{
+    fill: var(--red-light);
+}
+
+.aside a svg,.aside a img {
+    max-height: 35px;
+}
+.aside a.active p{ color: var(--red-light);}
+.aside a.active:hover { background-color: var(--light); }
 .nav a:hover {
     background-color: var(--red-light);
 }
