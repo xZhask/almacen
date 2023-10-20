@@ -8,34 +8,26 @@ let actionForm; //Acción de formulario
 let carritoVenta = []; //Carrito de venta
 _links.forEach((link) => {
   link.addEventListener("click", (_) => {
-    /* if (link.id != "venta" && carritoVenta.length>0) {
-      alert('desea limpiar el listado del carrito de venta?')
-    } */
+    if (link.id == "venta" && link.classList.contains('active') == true) {
+      //alert('desea limpiar el listado del carrito de venta?')
+    } else {
+      carritoVenta.length = 0
+      $.ajax({
+        method: "POST",
+        url: `App/views/${link.id}.html`,
+      }).done(function (html) {
+        $("#container").html(html);
+        _links.forEach((link) => {
+          link.classList.remove("active");
+        });
+        link.classList.toggle("active");
 
-    $.ajax({
-      method: "POST",
-      url: `App/views/${link.id}.html`,
-    }).done(function (html) {
-      $("#container").html(html);
-      _links.forEach((link) => {
-        link.classList.remove("active");
       });
-      link.classList.toggle("active");
-      console.log(link);
-    });
+    }
+    console.log(carritoVenta)
+
   });
 });
-
-/*
-buttons2.forEach(button =>{
-  button.addEventListener("click",_ =>{
-    buttons2.forEach(button =>{
-      button.classList.remove("edit");
-    })
-    button.classList.toggle("edit");
-  })
-})
-*/
 /* MODAL Y MENSAJES */
 const abrirModal = (data) => {
   modal.style.display = "table";
@@ -189,7 +181,8 @@ const infoProductoSeleccionado = (position, section) => {
 };
 function renderCarrito() {
   const filasCarrito = crearFilasCarrito();
-  const totalCarrito = calcularTotales();
+  let totalCarrito = calcularTotales();
+  totalCarrito = `<tr><td colspan="5" class="t_bold">Total</td><td class="t_bold">S/ ${totalCarrito}</td></tr>`;
   $("#tb_venta").html(`${filasCarrito}${totalCarrito}`);
   console.log(carritoVenta);
 }
@@ -197,10 +190,8 @@ const crearFilasCarrito = () =>
   carritoVenta
     .map(
       (product, indice) =>
-        `<tr><td><i class="fa-solid fa-circle-xmark btn_delete btn_red"></i></td><td>${
-          indice + 1
-        }</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${
-          product.cantidad
+        `<tr><td><i class="fa-solid fa-circle-xmark btn_delete btn_red"></i></td><td>${indice + 1
+        }</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${product.cantidad
         }</td><td>S/ ${product.subtotal}</td>`
     )
     .join("");
@@ -209,9 +200,7 @@ const calcularTotales = () => {
     (acumulador, product) => +product.subtotal + acumulador,
     0
   );
-  return `<tr><td colspan="5" class="t_bold">Total</td><td class="t_bold">S/ ${total.toFixed(
-    2
-  )}</td></tr>`;
+  return total.toFixed(2);
 };
 
 $(document).on("click", "#tb_venta .btn_delete", function () {
@@ -222,13 +211,12 @@ $(document).on("click", "#tb_venta .btn_delete", function () {
   carritoVenta.splice(position, 1);
   renderCarrito();
 });
-function limpiarCarrito() {}
+function limpiarCarrito() { }
 /* MODAL */
 const modal = document.querySelector("#bg-modal");
 const modalContent = document.querySelector("#modal-content");
 const modalForm = document.querySelector("#modal_form");
 /* NUEVO PRODUCTO */
-//Cerrar Modal
 
 $(document).on("click", "#btn_newProduct", () => {
   actionForm = "CREATE_PRODUCT";
@@ -268,6 +256,20 @@ $(document).on("submit", "#frmProduct", async (e) => {
   mostrarProducts();
   cerrarModal();
 });
+/* REGISTRAR CARRITO */
+$(document).on("click", "#btnSaveSale", async () => {
+  let totalVenta = await calcularTotales();
+  let datos = new FormData();
+  datos.append("accion", "CREATE_MOVEMENT");
+  datos.append("tipo", 'I');
+  datos.append("concepto", 'VENTA');
+  datos.append("total", totalVenta);
+  //datos.append('movementDetail', carritoVenta)
+  let respuesta = await postData(datos);
+  showMsg(respuesta.status, respuesta.msg);
+  //console.log(respuesta.otro)
+});
+
 
 /* const abrirModal = (form) => {
   modal.style.display = "table";
