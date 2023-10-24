@@ -47,8 +47,24 @@ function controller($accion)
                 'total' => $_POST['total'],
             ];
             $create_movement = $objMovement->createMovement($datos);
+            if ($create_movement > 0) {
+                $detalle = json_decode($_POST['movementDetail']);
+                foreach ($detalle as $k => $v) {
+                    $dataDetail = [
+                        'item' => $k + 1,
+                        'id_movimiento' => $create_movement,
+                        'idproducto' => $v->idproducto,
+                        'cantidad' => $v->cantidad,
+                        'precio' => $v->precio,
+                        'subtotal' => $v->subtotal,
+                    ];
+                    $objMovement->movementDetail($dataDetail);
+                    //item, id_movimiento, idproducto, cantidad, precio, subtotal
+                }
+            }
             $msg = ($create_movement > 0) ? 'SE REGISTRÓ CORRECTAMENTE' : 'OCURRIÓ UN ERROR';
             $response = ['status' => $create_movement, 'msg' => $msg];
+
             echo json_encode($response);
             break;
     }

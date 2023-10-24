@@ -8,10 +8,10 @@ let actionForm; //Acción de formulario
 let carritoVenta = []; //Carrito de venta
 _links.forEach((link) => {
   link.addEventListener("click", (_) => {
-    if (link.id == "venta" && link.classList.contains('active') == true) {
+    if (link.id == "venta" && link.classList.contains("active") == true) {
       //alert('desea limpiar el listado del carrito de venta?')
     } else {
-      carritoVenta.length = 0
+      carritoVenta.length = 0;
       $.ajax({
         method: "POST",
         url: `App/views/${link.id}.html`,
@@ -21,11 +21,9 @@ _links.forEach((link) => {
           link.classList.remove("active");
         });
         link.classList.toggle("active");
-
       });
     }
-    console.log(carritoVenta)
-
+    console.log(carritoVenta);
   });
 });
 /* MODAL Y MENSAJES */
@@ -158,7 +156,9 @@ $(document).on("click", "#add_car", () => {
         if (newCantidad > stock) alert("Stock insuficiente");
         else {
           carritoVenta[positionCarProduct].cantidad = newCantidad;
-          carritoVenta[positionCarProduct].subtotal = newCantidad * precio;
+          carritoVenta[positionCarProduct].subtotal = (
+            newCantidad * precio
+          ).toFixed(2);
         }
       }
       renderCarrito();
@@ -190,8 +190,10 @@ const crearFilasCarrito = () =>
   carritoVenta
     .map(
       (product, indice) =>
-        `<tr><td><i class="fa-solid fa-circle-xmark btn_delete btn_red"></i></td><td>${indice + 1
-        }</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${product.cantidad
+        `<tr><td><i class="fa-solid fa-circle-xmark btn_delete btn_red"></i></td><td>${
+          indice + 1
+        }</td><td>${product.nombre}</td><td>S/ ${product.precio}</td><td>${
+          product.cantidad
         }</td><td>S/ ${product.subtotal}</td>`
     )
     .join("");
@@ -211,7 +213,7 @@ $(document).on("click", "#tb_venta .btn_delete", function () {
   carritoVenta.splice(position, 1);
   renderCarrito();
 });
-function limpiarCarrito() { }
+function limpiarCarrito() {}
 /* MODAL */
 const modal = document.querySelector("#bg-modal");
 const modalContent = document.querySelector("#modal-content");
@@ -241,8 +243,7 @@ $(document).on("click", "#tb_products .btnEditProduct", function () {
   abrirModal(parametros);
 });
 $(document).on("click", "#btnCleanCart", () => {
-  carritoVenta.length = 0;
-  $("#tb_venta").html(``);
+  limpiarCarrito();
 });
 /* REGISTRAR PRODUCTO */
 $(document).on("submit", "#frmProduct", async (e) => {
@@ -261,193 +262,15 @@ $(document).on("click", "#btnSaveSale", async () => {
   let totalVenta = await calcularTotales();
   let datos = new FormData();
   datos.append("accion", "CREATE_MOVEMENT");
-  datos.append("tipo", 'I');
-  datos.append("concepto", 'VENTA');
+  datos.append("tipo", "I");
+  datos.append("concepto", "VENTA");
   datos.append("total", totalVenta);
-  //datos.append('movementDetail', carritoVenta)
+  datos.append("movementDetail", JSON.stringify(carritoVenta));
   let respuesta = await postData(datos);
   showMsg(respuesta.status, respuesta.msg);
-  //console.log(respuesta.otro)
+  limpiarCarrito();
 });
-
-
-/* const abrirModal = (form) => {
-  modal.style.display = "table";
-  $.ajax({
-    url: `App/views/modals/${form}`,
-    cache: false,
-    dataType: "html",
-    success: function (data) {
-      $("#modal_form").html(data);
-      if (form === "frmPersonal.html") {
-        if (actionForm == "U") llenarDatosPersonal();
-        else $("#btn_search_personal").css("display", "block");
-      }
-      if (form === "frmNuevoRegistro.html") {
-        if (actionForm == "U") {
-          llenarTipoDoc();
-          llenarDatosIncidencia();
-          llenarListadoPeritos();
-        } else {
-          $("#btn_search_user").css("display", "block");
-          $("#btn_search_conductor").css("display", "block");
-          let fechaActual = cargarFechaActual();
-          console.log(fechaActual);
-          $("#fechaRecepcion").val(fechaActual["fecha"]);
-          $("#horaRecepcion").val(fechaActual["hora"]);
-          fechaRecepcion.max = fechaActual["fecha"];
-          fechaInfraccion.max = fechaActual["fecha"];
-          fechaExtraccion.max = fechaActual["fecha"];
-        }
-      }
-    },
-  });
-}; */
-/*
-buttons2.forEach(button =>{
-  button.addEventListener("click",_ =>{
-    buttons2.forEach(button =>{
-      button.classList.remove("edit");
-    })
-    button.classList.toggle("edit");
-  })
-})
-
-*/
-/* async function postData(data) {
-  const response = await fetch("App/controller/controller.php", {
-    method: "POST",
-    body: data,
-  }).then((res) => res.json());
-  return await response;
-} */
-
-/* Validar */
-/* if (document.querySelector("#frmExcelImport")) {
-  const form = document.querySelector("#frmExcelImport");
-  const contTable = document.querySelector("#cont-result");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let frm = document.querySelector("#frmExcelImport");
-    let datos = new FormData(frm);
-    datos.append("accion", "VALIDAR");
-    let respuesta = await postData(datos);
-    contTable.innerHTML = respuesta.data;
-  });
+function limpiarCarrito() {
+  carritoVenta.length = 0;
+  $("#tb_venta").html(``);
 }
-if (document.querySelector("#ipress-validador")) {
-  document.querySelector("#ipress-validador").value =
-    localStorage.getItem("ipress");
-}
-if (document.querySelector("#mi-archivo")) {
-  const myFile = document.querySelector("#mi-archivo");
-  const textoFile = document.querySelector("#lbl-miarchivo");
-  const btnValidar = document.querySelector("#submit");
-  myFile.addEventListener("change", () => {
-    filename = myFile.value.split("\\").pop();
-    textoFile.textContent = filename;
-    btnValidar.classList.add("active");
-  });
-}
-if (document.querySelector("#submit")) {
-  const myFile = document.querySelector("#mi-archivo");
-  const btnValidar = document.querySelector("#submit");
-  btnValidar.addEventListener("click", () => {
-    if (myFile.value == "") alert("Seleccione archivo");
-  });
-}
-const inputIpress = document.querySelector("#ipress");
-const inputProcedimiento = document.querySelector("#procedimiento");
-const tbTarifario = document.querySelector("#tbCpms");
-const contLoader = document.querySelector(".preloader");
-const lnkValidar = document.querySelector("#lnk-validar");
-
-let nivelIpress;
-let tarifario = [];
-
-window.addEventListener("load", async () => {
-  contLoader.style.opacity = 0;
-  contLoader.style.visibility = "hidden";
-
-  const datos = new FormData();
-  datos.append("accion", "LISTAR_UNIDADES");
-  const cargarUnidades = await postData(datos);
-  const unidadesList = cargarUnidades.map((unidad) => unidad.nombreIpress);
-  CargarAutocompletado(unidadesList, cargarUnidades);
-});
-
-async function postData(data) {
-  const response = await fetch("App/controller/controller.php", {
-    method: "POST",
-    body: data,
-  }).then((res) => res.json());
-  return await response;
-}
-function CargarAutocompletado(list, unidades) {
-  $("#ipress").autocomplete({
-    source: list,
-    select: (e, item) => {
-      let unidad = item.item.value;
-      let position = list.indexOf(unidad);
-      nivelIpress = unidades[position].nivel;
-      cargarTarifario(nivelIpress);
-      localStorage.setItem("ipress", unidad);
-    },
-  });
-}
-async function cargarTarifario(nivel) {
-  let datos = new FormData();
-  datos.append("accion", "CARGAR_TARIFARIO");
-  datos.append("nivelIpress", nivel);
-  tarifario = await postData(datos);
-  renderTabla(tarifario);
-}
-
-const crearFilasTabla = (tarifario) =>
-  tarifario
-    .map(
-      (procedimiento, indice) =>
-        `<tr><td>${indice + 1}</td><td>${procedimiento.codigoCpms}</td><td>${
-          procedimiento.descripcion
-        }</td><td>S/.${procedimiento.precio}</td></tr>`
-    )
-    .join("");
-
-function renderTabla(tarifario) {
-  const filasString = crearFilasTabla(tarifario);
-  tbTarifario.innerHTML = filasString;
-  $(".bg-dark").css("display", "none");
-  $("#btnExcel").prop(
-    "href",
-    `resources/libraries/Excel/tarifario.php?nvl=${nivelIpress}`
-  );
-}
-inputProcedimiento.addEventListener("keyup", (e) => {
-  const nuevaTabla = tarifario.filter((procedimiento) =>
-    `${procedimiento.descripcion.toLowerCase()} ${procedimiento.codigoCpms.toLowerCase()}`.includes(
-      inputProcedimiento.value.toLowerCase()
-    )
-  );
-  renderTabla(nuevaTabla);
-});
-posicionarBuscador();
-
-$(window).scroll(function () {
-  posicionarBuscador();
-});
-
-function posicionarBuscador() {
-  var alturaHeader = $("header").outerHeight(true);
-  if ($(window).scrollTop() >= alturaHeader) {
-    $(".cont-search").addClass("fixed");
-    $(".cont-table").css("margin-top", "135px");
-  } else {
-    $(".cont-search").removeClass("fixed");
-    $(".cont-table").css("margin-top", "0");
-  }
-}
-lnkValidar.addEventListener("click", () => {
-  window.open("validarcpms.php", "_blank");
-  window.focus();
-});
- */
